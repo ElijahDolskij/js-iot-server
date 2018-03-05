@@ -4,9 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Temp ui form js-iot-server</title>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <button class="test-button">Show me text</button>
+    <form class="ui-form">
+        <input class="input-to-send">
+        <div class="buttons">
+            <button class="get-text"><b>Get</b> text from server</button>
+            <button class="send-text"><b>Send</b> text to server</button>
+        </div>
+    </form>
+    <span class="output-title">Output:</span>
+    <div class="output"></div>
     <script src="./temp-ui-script.js"></script>
 </body>
 </html>

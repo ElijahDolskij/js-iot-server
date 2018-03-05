@@ -1,0 +1,46 @@
+.ui-form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    padding: 20px;
+    background: #d9eeff
+}
+
+.ui-form .buttons {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+
+.ui-form button {
+    max-width: 45%;
+    height: 24px;
+    font-size: 16px;
+    background: #654a85;
+    outline: none;
+    border: none;
+    color: #fff;
+}
+
+.ui-form input {
+    height: 32px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    font-size: 18px;
+}
+
+.output-title {
+    display: block;
+    padding-top: 20px;
+    font-size: 26px;
+    color: #ddd;
+}
+
+.output-title.full {
+    color: #000;
+}
+
+.output {
+    padding-top: 20px
+}

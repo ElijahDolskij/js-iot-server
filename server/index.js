@@ -2,18 +2,15 @@ const http = require('http')
 const fs = require('fs')
 
 const serverOptions = require('./server_options.js')
+const log = require('./serverEventLogger.js')
 
-const serverEventLogger = (logEvent) => {
-  const d = new Date()
-  const checkFormat = (val) => (val < 10) ? `0${val}` : val
-  console.info(`${checkFormat(d.getHours())}:${checkFormat(d.getMinutes())}:${checkFormat(d.getSeconds())} server log event: "${logEvent}"`)
-}
 
-serverEventLogger('Server running')
+log('Server running')
 
 module.exports = server = () => http.createServer((req, res) => {
 
-  if (req.method === 'GET') {
+  // GET request processing function
+  const processGet = () => {
     res.writeHead(200,
       {
         'ContentType': 'text/plain',
@@ -25,22 +22,44 @@ module.exports = server = () => http.createServer((req, res) => {
       './temp_db_store/test.txt',
       'utf8', 
       (error, data) => {
-        serverEventLogger('Start of reading')
+        log('Start of reading')
         if(error) {
           throw error
         }
-        serverEventLogger('File-data read successfully')
-        res.end(data, () => serverEventLogger('Data sent to user'))
+        log('File-data read successfully')
+        res.end(data, () => log('Data sent to user'))
       }
     )
-  } else if (req.method === 'POST') {
+  }
+
+  // POST request processing function
+  const processPost = () => {
+    let data = []
     res.writeHead(200,
       {
         'ContentType': 'text/plain',
         ...serverOptions.devHeaders
       }
     )
-    res.end('POST!')
+    req.on('data', (chunk) => {
+      data.push(chunk.toString())
+    })
+    
+    req.on('end', () => {
+      data = JSON.parse(data.join(''))
+      
+      fs.writeFile('./temp_db_store/test.txt', data.testData, (err) => {
+        if (err) {
+            log(err)
+        }
+    
+        log("File data was saved!")
+        res.end('File data was saved: ' + data.testData)
+      })
+    })
   }
 
-}).listen(3000, '127.0.0.1')
+  if (req.method === 'GET') processGet()
+  else if (req.method === 'POST') processPost()
+
+}).listen(3002, '127.0.0.1')

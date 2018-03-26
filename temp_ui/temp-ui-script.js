@@ -1,19 +1,19 @@
 'use strict'
 
+// Options to fetch connections for all request types
 const devOptions = {
-  host: 'http://127.0.0.1:3000',
+  host: 'http://127.0.0.1:3002',
   getOpt: {
     mode: 'cors'
   },
   postOpt: {
     mode: 'cors',
     method: 'post',  
-    headers: {  
-      'Content-type': 'text/plain'
-    }
+    headers: new Headers()
   }
 }
 
+// Service functions to get and post data methods
 const getTextFromServer = ({host, getOpt} = devOptions) => {
   fetch(host, getOpt)
   .then((res) => {
@@ -35,8 +35,11 @@ const getTextFromServer = ({host, getOpt} = devOptions) => {
 }
 
 const writeTextOnServer = (data, {host, postOpt} = devOptions) => {
-  let body = data
-  fetch(host, {...postOpt, body})
+  let fullParams = {
+    ...postOpt,
+    body: JSON.stringify({testData: data})
+  }
+  fetch(host, fullParams)
   .then((res) => {
     console.log(res.status)
     return res
@@ -54,6 +57,7 @@ const writeTextOnServer = (data, {host, postOpt} = devOptions) => {
     console.log('Server error: ', err)
   })
 }
+// END service functions to get and post data methods
 
 let getTextBtn = document.querySelector('.get-text')
 let sendTextBtn = document.querySelector('.send-text')

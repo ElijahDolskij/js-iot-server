@@ -8,7 +8,7 @@ const devOptions = {
   },
   postOpt: {
     mode: 'cors',
-    method: 'post',  
+    method: 'post',
     headers: new Headers()
   }
 }

@@ -1,9 +1,10 @@
 const http = require('http')
-const fs = require('fs')
 
 const serverOptions = require('./server_options.js')
+const storageApi = require('./db_api/index.js')
 const log = require('./serverEventLogger.js')
 
+const storApi = storageApi()
 
 log('Server running')
 
@@ -17,10 +18,10 @@ module.exports = server = () => http.createServer((req, res) => {
         ...serverOptions.devHeaders
       }
     )
-  
-    fs.readFile(
+
+    /*fs.readFile(
       './temp_db_store/test.txt',
-      'utf8', 
+      'utf8',
       (error, data) => {
         log('Start of reading')
         if(error) {
@@ -29,6 +30,18 @@ module.exports = server = () => http.createServer((req, res) => {
         log('File-data read successfully')
         res.end(data, () => log('Data sent to user'))
       }
+    )*/
+
+    let readStart = () => log('Start of reading')
+    let readEnd = () => log('File-data read successfully')
+    let afterRead = (data) => res.end(data, () => log('Data sent to user'))
+
+    storApi.readFile(
+      './temp_db_store/',
+      'test.txt',
+      readStart,
+      readEnd,
+      afterRead
     )
   }
 
@@ -44,15 +57,15 @@ module.exports = server = () => http.createServer((req, res) => {
     req.on('data', (chunk) => {
       data.push(chunk.toString())
     })
-    
+
     req.on('end', () => {
       data = JSON.parse(data.join(''))
-      
+
       fs.writeFile('./temp_db_store/test.txt', data.testData, (err) => {
         if (err) {
             log(err)
         }
-    
+
         log("File data was saved!")
         res.end('File data was saved: ' + data.testData)
       })

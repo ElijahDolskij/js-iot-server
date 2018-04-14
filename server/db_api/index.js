@@ -1,7 +1,10 @@
-const fsApi = require('./fsBindings.js')
-// const dbApi = require('./dbBindings.js')
+let fsApi = require('./fsBindings')
+let dbApi = require('./dbBindings')
+let storageConfig = require('../configs/server_config')
 
+let storage = storageConfig['storageType']
 
-module.exports = (storageType = 'node fs') => {
-  if (storageType === 'node fs') return fsApi
+module.exports = () => {
+  if (storage === 'node.js fs') return fsApi
+  return dbApi
 }

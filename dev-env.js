@@ -1,7 +1,7 @@
-const staticServer = require('serve')
-const childProc = require('child_process')
+let staticServer = require('serve')
+let childProc = require('child_process')
 
-const backEnd = require('./server/index.js')
+let backEnd = require('./server/index')
 
 
 

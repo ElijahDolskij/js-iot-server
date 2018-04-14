@@ -1,7 +1,7 @@
 'use strict'
 
 // Options to fetch connections for all request types
-const devOptions = {
+const DEV_OPTIONS = {
   host: 'http://127.0.0.1:3002',
   getOpt: {
     mode: 'cors'
@@ -14,7 +14,7 @@ const devOptions = {
 }
 
 // Service functions to get and post data methods
-const getTextFromServer = ({host, getOpt} = devOptions) => {
+let getTextFromServer = ({host, getOpt} = DEV_OPTIONS) => {
   fetch(host, getOpt)
   .then((res) => {
     console.log(res.status)
@@ -34,7 +34,7 @@ const getTextFromServer = ({host, getOpt} = devOptions) => {
   })
 }
 
-const writeTextOnServer = (data, {host, postOpt} = devOptions) => {
+let writeTextOnServer = (data, {host, postOpt} = DEV_OPTIONS) => {
   let fullParams = {
     ...postOpt,
     body: JSON.stringify({testData: data})

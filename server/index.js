@@ -1,43 +1,31 @@
-const http = require('http')
+let http = require('http')
 
-const serverOptions = require('./server_options.js')
-const storageApi = require('./db_api/index.js')
-const log = require('./serverEventLogger.js')
+let serverConfig = require('./configs/server_config')
+let storageApi = require('./db_api/index')
+let log = require('./serverEventLogger')
 
-const storApi = storageApi()
+let storApi = storageApi()
+let responseOptions = serverConfig['responseOptions']
 
 log('Server running')
 
 module.exports = server = () => http.createServer((req, res) => {
 
   // GET request processing function
-  const processGet = () => {
+  let processGet = () => {
     res.writeHead(200,
       {
         'ContentType': 'text/plain',
-        ...serverOptions.devHeaders
+        ...responseOptions['devHeaders']
       }
     )
-
-    /*fs.readFile(
-      './temp_db_store/test.txt',
-      'utf8',
-      (error, data) => {
-        log('Start of reading')
-        if(error) {
-          throw error
-        }
-        log('File-data read successfully')
-        res.end(data, () => log('Data sent to user'))
-      }
-    )*/
 
     let readStart = () => log('Start of reading')
     let readEnd = () => log('File-data read successfully')
     let afterRead = (data) => res.end(data, () => log('Data sent to user'))
 
     storApi.readFile(
-      './temp_db_store/',
+      './temp_db_store',
       'test.txt',
       readStart,
       readEnd,
@@ -46,12 +34,12 @@ module.exports = server = () => http.createServer((req, res) => {
   }
 
   // POST request processing function
-  const processPost = () => {
+  let processPost = () => {
     let data = []
     res.writeHead(200,
       {
         'ContentType': 'text/plain',
-        ...serverOptions.devHeaders
+        ...responseOptions['devHeaders']
       }
     )
     req.on('data', (chunk) => {
@@ -61,14 +49,16 @@ module.exports = server = () => http.createServer((req, res) => {
     req.on('end', () => {
       data = JSON.parse(data.join(''))
 
-      fs.writeFile('./temp_db_store/test.txt', data.testData, (err) => {
-        if (err) {
-            log(err)
-        }
+      let writeComplete = () => log("File data was saved!")
+      let afterWrite = () => res.end('File data was saved: ' + data.testData)
 
-        log("File data was saved!")
-        res.end('File data was saved: ' + data.testData)
-      })
+      storApi.writeFile(
+        './temp_db_store',
+        'test.txt',
+        data.testData,
+        writeComplete,
+        afterWrite
+      )
     })
   }
 

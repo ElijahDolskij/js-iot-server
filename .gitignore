@@ -4,4 +4,4 @@ node_modules
 .DS_Store
 TODOs.txt
 *.log
-temp_db_store/
+temp_db_store

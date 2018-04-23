@@ -20,16 +20,15 @@ module.exports = server = () => http.createServer((req, res) => {
       }
     )
 
-    let readStart = () => log('Start of reading')
-    let readEnd = () => log('File-data read successfully')
-    let afterRead = (data) => res.end(data, () => log('Data sent to user'))
+    let fileReadingSuccess = (data) => res.end(data, () => log('Data sent to user'))
+
+    log('Start of reading')
 
     storApi.readFile(
-      './temp_db_store',
-      'test.txt',
-      readStart,
-      readEnd,
-      afterRead
+      './temp_db_store/test.txt'
+    ).then(
+      (data) => fileReadingSuccess(data),
+      (error) => {throw error}
     )
   }
 
@@ -49,16 +48,16 @@ module.exports = server = () => http.createServer((req, res) => {
     req.on('end', () => {
       data = JSON.parse(data.join(''))
 
-      let writeComplete = () => log("File data was saved!")
-      let afterWrite = () => res.end('File data was saved: ' + data.testData)
+      let writeComplete = () => res.end('File data was saved: ' + data.testData)
 
       storApi.writeFile(
-        './temp_db_store',
-        'test.txt',
-        data.testData,
-        writeComplete,
-        afterWrite
+        './temp_db_store/test.txt',
+        data.testData
       )
+        .then(
+          (data) => writeComplete(data),
+          (error) => {throw error}
+        )
     })
   }
 

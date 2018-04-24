@@ -10,7 +10,7 @@ module.exports = {
       fs.readFile(
         url,
         (error, data) => {
-          if (error) rej(error)
+          if (error) return rej(error)
           res(data)
         }
       )
@@ -28,7 +28,7 @@ module.exports = {
         url,
         data,
         (error) => {
-          if (error) rej(error)
+          if (error) return rej(error)
           res()
         }
       )

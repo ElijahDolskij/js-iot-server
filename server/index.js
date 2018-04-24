@@ -10,7 +10,6 @@ let responseOptions = serverConfig['responseOptions']
 
 module.exports = server = () => {
   app.get('/', (req, res) => {
-
     // GET request processing function
     let processGet = () => {
       res.set(

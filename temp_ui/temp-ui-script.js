@@ -17,20 +17,20 @@ const DEV_OPTIONS = {
 let getTextFromServer = ({host, getOpt} = DEV_OPTIONS) => {
   fetch(host, getOpt)
   .then((res) => {
-    console.log(res.status)
+    console.info(`Response status: ${res.status}`)
     return res
   })
   .then((res) => {
     res.text()
     .then((text) => {
-      console.log(text)
+      console.info(`File data from server: ${text}`)
     })
     .catch((err) => {
-      console.log('Text parse error: ', err)
+      console.error('Text parse error: ', err)
     })
   })
   .catch((err) => {
-    console.log('Server error: ', err)
+    console.error('Server error: ', err)
   })
 }
 
@@ -41,13 +41,13 @@ let writeTextOnServer = (data, {host, postOpt} = DEV_OPTIONS) => {
   }
   fetch(host, fullParams)
   .then((res) => {
-    console.log(res.status)
+    console.info(`Response status: ${res.status}`)
     return res
   })
   .then((res) => {
     res.text()
     .then((text) => {
-      console.log(text)
+      console.log(`Next data sent to server: ${text}`)
     })
     .catch((err) => {
       console.log('Text parse error: ', err)

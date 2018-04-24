@@ -1,7 +1,7 @@
 let express = require('express')
 
 let serverConfig = require('./configs/server_config')
-let storageApi = require('./db_api/index')
+let storageApi = require('./db_api/')
 let log = require('./serverEventLogger')
 
 let app = express()
@@ -21,11 +21,11 @@ module.exports = server = () => {
 
       let fileReadingSuccess = (data) => {
         res.send(data)
-        log('Data sent to user')
+        log('Reading is complete. Data sent to client.')
       }
       // TODO: add a callback about success to function above () => log('Data sent to user')
 
-      log('Start of reading')
+      log('Start of data reading')
 
       storApi.readFile(
         './temp_db_store/test.txt'
@@ -36,7 +36,6 @@ module.exports = server = () => {
     }
 
     processGet()
-
   })
 
   app.post('/', (req, res) => {
@@ -56,7 +55,12 @@ module.exports = server = () => {
       req.on('end', () => {
         data = JSON.parse(data.join(''))
 
-        let writeComplete = () => res.send('File data was saved: ' + data.testData)
+        let writeComplete = () => {
+          res.send(data.testData)
+          log('Writing is successfull')
+        }
+
+        log('Start of data writing')
 
         storApi.writeFile(
           './temp_db_store/test.txt',

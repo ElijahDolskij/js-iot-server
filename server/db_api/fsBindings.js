@@ -4,7 +4,6 @@ module.exports = {
   /**
    * Read data from storage item (file or database entry)
    * @param {string} url - path to data-entry
-   * @param {function} successReadFn - callback run after success reading
    */
   readFile: (url) => {
     return new Promise((res, rej) => {

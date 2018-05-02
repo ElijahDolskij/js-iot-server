@@ -4,7 +4,7 @@
 const DEV_OPTIONS = {
   host: 'http://127.0.0.1:3002',
   getOpt: {
-    mode: 'cors'
+    mode: 'no-cors'
   },
   postOpt: {
     mode: 'cors',
@@ -13,8 +13,19 @@ const DEV_OPTIONS = {
   }
 }
 
+let checkInps = (...inputs) => {
+  return !(inputs.some((inp) => {
+    if (!inp.value) {
+      alert(`Please enter "${inp.getAttribute('data-inp')}" field!`)
+      inp.focus()
+      return true
+    }
+  }))
+}
+
 // Service functions to get and post data methods
-let getTextFromServer = ({host, getOpt} = DEV_OPTIONS) => {
+let getTextFromServer = (fileUrl, {host, getOpt} = DEV_OPTIONS) => {
+  host = `${host}/temp_db_store/${fileUrl}`
   fetch(host, getOpt)
   .then((res) => {
     console.info(`Response status: ${res.status}`)
@@ -61,14 +72,15 @@ let writeTextOnServer = (data, {host, postOpt} = DEV_OPTIONS) => {
 
 let getTextBtn = document.querySelector('.get-text')
 let sendTextBtn = document.querySelector('.send-text')
-let inpToSend = document.querySelector('.input-to-send')
+let fileNameInp = document.querySelector('.file-name')
+let fileDataArea = document.querySelector('.file-data')
 
 getTextBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  getTextFromServer()
+  if (checkInps(fileNameInp)) getTextFromServer(fileNameInp.value)
 })
 
 sendTextBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  writeTextOnServer(inpToSend.value)
+  writeTextOnServer(fileDataArea.value) //TODO: only depending on check result
 })

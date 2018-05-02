@@ -11,6 +11,7 @@ let responseOptions = serverConfig['responseOptions']
 module.exports = server = () => {
   app.get('/', (req, res) => {
     // GET request processing function
+    console.log(req.url)
     let processGet = () => {
       res.set(
         {
@@ -23,7 +24,6 @@ module.exports = server = () => {
         res.send(data)
         log('Reading is complete. Data sent to client.')
       }
-      // TODO: add a callback about success to function above () => log('Data sent to user')
 
       log('Start of data reading')
 

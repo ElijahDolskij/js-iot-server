@@ -22,12 +22,23 @@
     color: #fff;
 }
 
-.ui-form input {
-    height: 32px;
+.ui-form input[type='text'],
+.ui-form textarea {
     padding: 10px;
     box-sizing: border-box;
     border: none;
     font-size: 18px;
+}
+
+.ui-form input[type='text'] {
+    height: 32px;
+}
+
+.ui-form textarea {
+    height: 80px;
+    overflow: auto;
+    margin-top: 10px;
+    resize: none;
 }
 
 .output-title {

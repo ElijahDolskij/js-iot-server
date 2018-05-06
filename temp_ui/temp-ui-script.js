@@ -4,7 +4,7 @@
 const DEV_OPTIONS = {
   host: 'http://127.0.0.1:3002',
   getOpt: {
-    mode: 'no-cors'
+    mode: 'cors'
   },
   postOpt: {
     mode: 'cors',
@@ -25,7 +25,7 @@ let checkInps = (...inputs) => {
 
 // Service functions to get and post data methods
 let getTextFromServer = (fileUrl, {host, getOpt} = DEV_OPTIONS) => {
-  host = `${host}/temp_db_store/${fileUrl}`
+  host = `${host}?${fileUrl}`
   fetch(host, getOpt)
   .then((res) => {
     console.info(`Response status: ${res.status}`)
@@ -34,10 +34,10 @@ let getTextFromServer = (fileUrl, {host, getOpt} = DEV_OPTIONS) => {
   .then((res) => {
     res.text()
     .then((text) => {
-      console.info(`File data from server: ${text}`)
+      console.log(`File data from server: ${text}`)
     })
     .catch((err) => {
-      console.error('Text parse error: ', err)
+      console.error(`Text parse error: ${err}`)
     })
   })
   .catch((err) => {

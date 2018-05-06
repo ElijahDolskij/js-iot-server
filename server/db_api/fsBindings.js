@@ -9,6 +9,7 @@ module.exports = {
     return new Promise((res, rej) => {
       fs.readFile(
         url,
+        'utf-8',
         (error, data) => {
           if (error) return rej(error)
           res(data)

@@ -1,4 +1,4 @@
-{
+module.exports  = {
   "responseOptions": {
     "devHeaders": {
       "Access-Control-Allow-Origin": "*"

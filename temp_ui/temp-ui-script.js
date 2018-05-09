@@ -24,24 +24,19 @@ let checkInps = (...inputs) => {
 }
 
 // Service functions to get and post data methods
-let getTextFromServer = (fileUrl, {host, getOpt} = DEV_OPTIONS) => {
-  host = `${host}?${fileUrl}`
+let getTextFromServer = (fileName, {host, getOpt} = DEV_OPTIONS) => {
+  host = `${host}?${fileName}`
   fetch(host, getOpt)
   .then((res) => {
     console.info(`Response status: ${res.status}`)
-    return res
+    if (res.status === 404) {
+      alert(`File "${fileName}" does not exist. Enter name of existing file.`)
+      throw Error('not found')
+    }
+    return res.text()
   })
-  .then((res) => {
-    res.text()
-    .then((text) => {
-      console.log(`File data from server: ${text}`)
-    })
-    .catch((err) => {
-      console.error(`Text parse error: ${err}`)
-    })
-  })
-  .catch((err) => {
-    console.error('Server error: ', err)
+  .then((text) => {
+    console.log(`File data from server: ${text}`)
   })
 }
 

@@ -3,6 +3,15 @@ let log = require('./serverEventLogger')
 
 let storApi = storageApi()
 
+let fileReadingEnd = (res, data, logMessage = 'Default: Response sent to client') => {
+  res.send(data)
+  if (logMessage) log(logMessage)
+}
+
+let checkExistingFile = (name) => {
+ // TODO: Complete a function
+}
+
 module.exports = {
   processGet: (req, res, headers, fileStorePath, fileName, fileExtension) => {
     res.set(
@@ -12,11 +21,6 @@ module.exports = {
       }
     )
 
-    let fileReadingSuccess = (data) => {
-      res.send(data)
-      log('Reading is complete. Data sent to client')
-    }
-
     log('Start of data reading')
 
     storApi.readFile(
@@ -24,9 +28,14 @@ module.exports = {
     ).then(
       (data) => {
         console.log(data)
-        fileReadingSuccess(data)
+        fileReadingEnd(res, data, 'Reading is complete. Data sent to client')
       },
-      (error) => {throw error}
+      (error) => {
+        if(error.code === 'ENOENT') {
+          res.status(404).send('Not found')
+        }
+        throw error
+      }
     )
   },
 

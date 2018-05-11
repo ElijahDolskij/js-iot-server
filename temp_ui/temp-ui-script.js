@@ -25,7 +25,7 @@ let checkInps = (...inputs) => {
 
 // Service functions to get and post data methods
 let getTextFromServer = (fileName, {host, getOpt} = DEV_OPTIONS) => {
-  host = `${host}?${fileName}`
+  host = `${host}/read-file?${fileName}`
   fetch(host, getOpt)
   .then((res) => {
     console.info(`Response status: ${res.status}`)
@@ -40,11 +40,17 @@ let getTextFromServer = (fileName, {host, getOpt} = DEV_OPTIONS) => {
   })
 }
 
-let writeTextOnServer = (data, {host, postOpt} = DEV_OPTIONS) => {
+let writeTextOnServer = (filename, data, {host, postOpt} = DEV_OPTIONS) => {
   let fullParams = {
     ...postOpt,
-    body: JSON.stringify({testData: data})
+    host: `${host}/write-file`,
+    body: JSON.stringify({
+      fileName: filename,
+      newFileData: data,
+    })
+    //TODO:  Добвить имя файла в запрос
   }
+
   fetch(host, fullParams)
   .then((res) => {
     console.info(`Response status: ${res.status}`)
@@ -77,5 +83,7 @@ getTextBtn.addEventListener('click', (e) => {
 
 sendTextBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  writeTextOnServer(fileDataArea.value) //TODO: only depending on check result
+  if (checkInps(fileNameInp, fileDataArea)) {
+    writeTextOnServer(fileNameInp.value, fileDataArea.value)
+  }
 })

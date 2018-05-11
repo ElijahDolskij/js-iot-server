@@ -24,7 +24,6 @@ let fileReadingEnd = (response, data, logMessage = 'Default: Response sent to cl
 }
 
 module.exports = server = () => {
-
   // Middleware to set headers
   app.use((req, res, next) => {
     res.set(
@@ -36,8 +35,8 @@ module.exports = server = () => {
     next()
   })
 
-  app.get('/', (req, res) => {
-    let fileName = decodeURI(url.parse(req.url).query)
+  app.get('/read-file', (req, res) => {
+    let fileName = (req.url) ? decodeURI(url.parse(req.url).query) : null
 
     log('Start of data reading')
 
@@ -68,15 +67,15 @@ module.exports = server = () => {
       data = JSON.parse(data.join(''))
 
       let writeComplete = () => {
-        res.send(data.testData)
+        res.send(data.newFileData)
         log('Writing is successfull')
       }
 
       log('Start of data writing')
 
       storApi.writeFile(
-        './temp_db_store/test.txt',
-        data.testData
+        `${fileStorePath}${data.fileName}.${fileExtension}`,
+        data.newFileData
         )
         .then(
           (data) => writeComplete(data),

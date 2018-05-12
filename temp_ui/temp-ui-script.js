@@ -32,6 +32,9 @@ let getTextFromServer = (fileName, {host, getOpt} = DEV_OPTIONS) => {
     if (res.status === 404) {
       alert(`File "${fileName}" does not exist. Enter name of existing file.`)
       throw Error('not found')
+    } else if (res.status !== 200) {
+      alert('Server error')
+      throw Error(`${res.statusText}: ${res.status}`)
     }
     return res.text()
   })
@@ -48,7 +51,6 @@ let writeTextOnServer = (filename, data, {host, postOpt} = DEV_OPTIONS) => {
       fileName: filename,
       newFileData: data,
     })
-    //TODO:  Добвить имя файла в запрос
   }
 
   fetch(host, fullParams)

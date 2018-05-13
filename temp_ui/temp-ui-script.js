@@ -18,6 +18,8 @@ let sendTextBtn = document.querySelector('.send-text')
 let fileNameInp = document.querySelector('.file-name')
 let fileDataArea = document.querySelector('.file-data')
 let dirListContainer = document.querySelector('.directory-list')
+let newDirBtn = document.querySelector('.create-directory')
+let newDirInp = document.querySelector('.directory-name')
 
 let checkInps = (...inputs) => {
   return !(inputs.some((inp) => {
@@ -101,6 +103,35 @@ let getDirList = (path = '', {host, getOpt} = DEV_OPTIONS) => {
       outputDirList(items)
     })
 }
+
+let creatNewDir = (dirName, pathToParentDir = '', data, {host, postOpt} = DEV_OPTIONS) => {
+  let fullParams = {
+    ...postOpt,
+    host: `${host}/create-new-dir${pathToParentDir}?${dirName}`,
+    body: JSON.stringify({
+      dirName: dirName
+    })
+  }
+
+  /*fetch(fullParams.host, fullParams)
+    .then((res) => {
+      console.info(`Response status: ${res.status}`)
+      return res
+    })
+    .then((res) => {
+      res.text()
+        .then((text) => {
+          console.log(`Next data sent to server: ${text}`)
+          getDirList()
+        })
+        .catch((err) => {
+          console.log('Text parse error: ', err)
+        })
+    })
+    .catch((err) => {
+      console.log('Server error: ', err)
+    })*/
+}
 // END service functions to get and post data methods
 
 // Function to update of directory list field content
@@ -125,6 +156,13 @@ sendTextBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (checkInps(fileNameInp, fileDataArea)) {
     writeTextOnServer(fileNameInp.value, fileDataArea.value)
+  }
+})
+
+newDirBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (checkInps(newDirInp)) {
+    creatNewDir()
   }
 })
 

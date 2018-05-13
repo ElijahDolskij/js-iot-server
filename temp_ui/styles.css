@@ -1,25 +1,44 @@
 .ui-form {
     display: flex;
-    flex-direction: column;
-    width: 400px;
-    padding: 20px;
+    width: 700px;
+    padding: 10px 20px 20px;
     background: #d9eeff
+}
+
+.ui-form .inputs {
+    display: flex;
+    flex-grow: 1;
+    padding-right: 40px;
+    flex-direction: column;
 }
 
 .ui-form .buttons {
     display: flex;
-    justify-content: space-between;
-    padding-top: 20px;
+    flex-direction: column;
 }
 
 .ui-form button {
-    max-width: 45%;
-    height: 24px;
+    display: flex;
+    min-width: 250px;
+    height: 32px;
+    margin-top: 10px;
     font-size: 16px;
     background: #654a85;
     outline: none;
     border: none;
+    text-align: right;
     color: #fff;
+    transition: opacity .3s;
+    cursor: pointer;
+}
+
+.ui-form button b {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.ui-form button:hover {
+    opacity: .7;
 }
 
 .ui-form input[type='text'],
@@ -28,6 +47,11 @@
     box-sizing: border-box;
     border: none;
     font-size: 18px;
+    margin-top: 10px;
+}
+
+.ui-form input.directory-name {
+    margin-top: 40px;
 }
 
 .ui-form input[type='text'] {
@@ -37,7 +61,6 @@
 .ui-form textarea {
     height: 80px;
     overflow: auto;
-    margin-top: 10px;
     resize: none;
 }
 

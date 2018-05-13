@@ -36,7 +36,7 @@ module.exports = {
     })
   },
   /**
-   * Return list of files and folder from target firectory
+   * Return list of just_folder and folder from target firectory
    * @param path {string} path to target directory
    */
   readDir: (path) => {

@@ -8,11 +8,15 @@
 </head>
 <body>
     <form class="ui-form">
-        <input type="text" class="file-name" data-inp="FILE URL" placeholder="Enter file url">
-        <textarea class="file-data" data-inp="FILE DATA" placeholder="Enter text data to file"></textarea>
+        <div class="inputs">
+            <input type="text" class="file-name" data-inp="FILE URL" placeholder="Enter file url">
+            <textarea class="file-data" data-inp="FILE DATA" placeholder="Enter text data to file"></textarea>
+            <input type="text" class="directory-name" data-inp="DIR NAME" placeholder="Enter a name of new directory">
+        </div>
         <div class="buttons">
             <button class="get-text"><b>Get</b> text from server</button>
             <button class="send-text"><b>Send</b> text to server</button>
+            <button class="create-directory"><b>Create</b> directory on server</button>
         </div>
     </form>
     <span class="directory-list-title">Directory-list:</span>

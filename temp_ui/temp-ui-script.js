@@ -13,6 +13,12 @@ const DEV_OPTIONS = {
   }
 }
 
+let getTextBtn = document.querySelector('.get-text')
+let sendTextBtn = document.querySelector('.send-text')
+let fileNameInp = document.querySelector('.file-name')
+let fileDataArea = document.querySelector('.file-data')
+let dirListContainer = document.querySelector('.directory-list')
+
 let checkInps = (...inputs) => {
   return !(inputs.some((inp) => {
     if (!inp.value) {
@@ -24,7 +30,7 @@ let checkInps = (...inputs) => {
 }
 
 // Service functions to get and post data methods
-let getTextFromServer = (fileName, {host, getOpt} = DEV_OPTIONS) => {
+let getFileData = (fileName, {host, getOpt} = DEV_OPTIONS) => {
   host = `${host}/read-file?${fileName}`
   fetch(host, getOpt)
   .then((res) => {
@@ -53,7 +59,7 @@ let writeTextOnServer = (filename, data, {host, postOpt} = DEV_OPTIONS) => {
     })
   }
 
-  fetch(host, fullParams)
+  fetch(fullParams.host, fullParams)
   .then((res) => {
     console.info(`Response status: ${res.status}`)
     return res
@@ -62,6 +68,7 @@ let writeTextOnServer = (filename, data, {host, postOpt} = DEV_OPTIONS) => {
     res.text()
     .then((text) => {
       console.log(`Next data sent to server: ${text}`)
+      getDirList()
     })
     .catch((err) => {
       console.log('Text parse error: ', err)
@@ -71,16 +78,47 @@ let writeTextOnServer = (filename, data, {host, postOpt} = DEV_OPTIONS) => {
     console.log('Server error: ', err)
   })
 }
+
+let getDirList = (path = '', {host, getOpt} = DEV_OPTIONS) => {
+  host = `${host}/get-dir-list/${path}`
+  fetch(host, getOpt)
+    .then((res) => {
+      console.info(`Response status: ${res.status}`)
+      if (res.status === 404) {
+        alert(
+          `Directory on path: "${path}" does not exist.
+          Enter name of existing directory.`
+        )
+        throw Error('Directory is not exist')
+      } else if (res.status !== 200) {
+        alert('Server error')
+        throw Error(`${res.statusText}: ${res.status}`)
+      }
+      return res.json()
+    })
+    .then((items) => {
+      console.dir(items)
+      outputDirList(items)
+    })
+}
 // END service functions to get and post data methods
 
-let getTextBtn = document.querySelector('.get-text')
-let sendTextBtn = document.querySelector('.send-text')
-let fileNameInp = document.querySelector('.file-name')
-let fileDataArea = document.querySelector('.file-data')
+// Function to update of directory list field content
+let outputDirList = (items) => {
+  let list = document.createDocumentFragment()
+  items.map((item, i) => {
+    let newElem = document.createElement('li')
+    newElem.innerText = `${i + 1}. ${item}`
+    list.appendChild(newElem)
+  })
+  dirListContainer.appendChild(list)
+}
 
+
+// Initialization and and handlers
 getTextBtn.addEventListener('click', (e) => {
   e.preventDefault()
-  if (checkInps(fileNameInp)) getTextFromServer(fileNameInp.value)
+  if (checkInps(fileNameInp)) getFileData(fileNameInp.value)
 })
 
 sendTextBtn.addEventListener('click', (e) => {
@@ -89,3 +127,6 @@ sendTextBtn.addEventListener('click', (e) => {
     writeTextOnServer(fileNameInp.value, fileDataArea.value)
   }
 })
+
+// Output of list of root directory
+getDirList()

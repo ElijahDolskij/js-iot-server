@@ -57,7 +57,23 @@ module.exports = server = () => {
     )
   })
 
-  app.post('/', (req, res) => {
+  app.get('/get-dir-list', (req, res) => {
+    log('Start of reading directory')
+
+    storApi.readDir(
+      `${fileStorePath}`
+      )
+      .then((data) => {
+        fileReadingEnd(res, data, 'Directory list is received. Data sent to client')
+      })
+      .catch((error) => {
+        if(error.code === 'ENOENT') res.status(404).send('Not found')
+        else res.status(500).send(error.message)
+        throw error
+      })
+  })
+
+  app.post('/write-file', (req, res) => {
     let data = []
 
     req.on('data', (chunk) => {

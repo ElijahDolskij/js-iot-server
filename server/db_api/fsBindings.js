@@ -34,5 +34,17 @@ module.exports = {
         }
       )
     })
+  },
+  /**
+   * Return list of files and folder from target firectory
+   * @param path {string} path to target directory
+   */
+  readDir: (path) => {
+    return new Promise((res, rej) => {
+      fs.readdir(path, (err, items) => {
+        if(err) return rej(err)
+        return res(items)
+      })
+    })
   }
 }

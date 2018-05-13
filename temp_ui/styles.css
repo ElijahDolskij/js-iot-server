@@ -41,17 +41,24 @@
     resize: none;
 }
 
-.output-title {
+.directory-list-title {
     display: block;
-    padding-top: 20px;
     font-size: 26px;
     color: #ddd;
 }
 
-.output-title.full {
+.directory-list-title.full {
     color: #000;
 }
 
-.output {
-    padding-top: 20px
+.directory-list {
+    display: block;
+    padding: 0;
+}
+
+.directory-list li {
+    display: block;
+    font-size: 16px;
+    padding-top: 10px;
+    font-family: Arial, sans-serif;
 }

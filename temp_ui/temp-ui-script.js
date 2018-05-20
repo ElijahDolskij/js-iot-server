@@ -99,7 +99,6 @@ let getDirList = (path = '', {host, getOpt} = DEV_OPTIONS) => {
       return res.json()
     })
     .then((items) => {
-      console.dir(items)
       outputDirList(items)
     })
 }
@@ -107,13 +106,13 @@ let getDirList = (path = '', {host, getOpt} = DEV_OPTIONS) => {
 let creatNewDir = (dirName, pathToParentDir = '', data, {host, postOpt} = DEV_OPTIONS) => {
   let fullParams = {
     ...postOpt,
-    host: `${host}/create-new-dir${pathToParentDir}?${dirName}`,
+    host: `${host}/create-new-dir${pathToParentDir}`,
     body: JSON.stringify({
       dirName: dirName
     })
   }
 
-  /*fetch(fullParams.host, fullParams)
+  fetch(fullParams.host, fullParams)
     .then((res) => {
       console.info(`Response status: ${res.status}`)
       return res
@@ -121,16 +120,13 @@ let creatNewDir = (dirName, pathToParentDir = '', data, {host, postOpt} = DEV_OP
     .then((res) => {
       res.text()
         .then((text) => {
-          console.log(`Next data sent to server: ${text}`)
+          console.log(`New directory created '${text}' on server.`)
           getDirList()
         })
         .catch((err) => {
-          console.log('Text parse error: ', err)
+          console.log(`${err}: directory '${dirName}' not created.`)
         })
     })
-    .catch((err) => {
-      console.log('Server error: ', err)
-    })*/
 }
 // END service functions to get and post data methods
 
@@ -142,6 +138,7 @@ let outputDirList = (items) => {
     newElem.innerText = `${i + 1}. ${item}`
     list.appendChild(newElem)
   })
+  dirListContainer.innerHTML = ''
   dirListContainer.appendChild(list)
 }
 
@@ -162,7 +159,7 @@ sendTextBtn.addEventListener('click', (e) => {
 newDirBtn.addEventListener('click', (e) => {
   e.preventDefault()
   if (checkInps(newDirInp)) {
-    creatNewDir()
+    creatNewDir(newDirInp.value)
   }
 })
 

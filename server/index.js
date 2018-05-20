@@ -1,5 +1,6 @@
 let express = require('express')
 let url = require('url')
+let bodyParser = require('body-parser')
 
 let serverConfig = require('./configs/server_config')
 let log = require('./serverEventLogger')
@@ -34,6 +35,9 @@ module.exports = server = () => {
     )
     next()
   })
+
+  // Middleware to parse request data
+  app.use(bodyParser.text())
 
   app.get('/read-file', (req, res) => {
     let fileName = (req.url) ? decodeURI(url.parse(req.url).query) : null
@@ -74,36 +78,55 @@ module.exports = server = () => {
   })
 
   app.post('/write-file', (req, res) => {
-    let data = []
+    let name = JSON.parse(req.body).fileName
+    let content = JSON.parse(req.body).newFileData
 
-    req.on('data', (chunk) => {
-      data.push(chunk.toString())
-    })
+    let writeComplete = () => {
+      res.send(content)
+      log('Writing is successfull')
+    }
 
-    req.on('end', () => {
-      data = JSON.parse(data.join(''))
+    log('Start of data writing')
 
-      let writeComplete = () => {
-        res.send(data.newFileData)
-        log('Writing is successfull')
-      }
+    storApi.writeFile(
+      `${fileStorePath}${name}.${fileExtension}`,
+      content
+      )
+      .then(
+        (data) => writeComplete(data),
+        (error) => {throw error}
+      )
+  })
 
-      log('Start of data writing')
+  app.post('/create-new-dir', (req, res) => { // FIXME: pending
+    // FIXME: server not recive request
+    let dirName = JSON.parse(req.body).dirName
 
-      storApi.writeFile(
-        `${fileStorePath}${data.fileName}.${fileExtension}`,
-        data.newFileData
-        )
-        .then(
-          (data) => writeComplete(data),
-          (error) => {throw error}
-        )
-    })
+    let creationComplete = () => {
+      res.send(dirName)
+      log('New folder is created!')
+    }
+
+    log('Try to create folder')
+
+    storApi.createNewDir(
+      `${fileStorePath}${dirName}`
+      )
+      .then(
+        () => creationComplete('Creation is success'),
+      )
+      .catch(error => {
+        let msg = error.message
+        if(msg === 'Alredy exitst') {
+          res.status(409).send(msg)
+        }
+        throw error
+      })
   })
 
   // Middleware to log unexpected errors on server-side
   app.use((err) => {
-    log(err.message)
+    log(`ERROR: ${err.message}`) // FIXME: Find and resolve error!
   })
 
   app.listen(3002, '127.0.0.1')

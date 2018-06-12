@@ -1,8 +1,8 @@
 module.exports  = {
-  responseOptions: {
-    devHeaders: {
-      'Access-Control-Allow-Origin': '*'
+  "responseOptions": {
+    "devHeaders": {
+      "Access-Control-Allow-Origin": "*"
     }
   },
-  storageType: 'node.js fs'
+  "storageType": "node.js fs"
 }

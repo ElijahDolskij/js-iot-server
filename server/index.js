@@ -65,7 +65,7 @@ module.exports = server = () => {
     log('Start of reading directory')
 
     storApi.readDir(
-      fileStorePath
+      `${fileStorePath}`
       )
       .then((data) => {
         fileReadingEnd(res, data, 'Directory list is received. Data sent to client')
@@ -98,7 +98,8 @@ module.exports = server = () => {
       )
   })
 
-  app.post('/create-new-dir', (req, res) => {
+  app.post('/create-new-dir', (req, res) => { // FIXME: pending
+    // FIXME: server not recive request
     let dirName = JSON.parse(req.body).dirName
 
     let creationComplete = () => {
@@ -109,7 +110,7 @@ module.exports = server = () => {
     log('Try to create folder')
 
     storApi.createNewDir(
-      fileStorePath + dirName
+      `${fileStorePath}${dirName}`
       )
       .then(
         () => creationComplete('Creation is success'),

@@ -5,7 +5,7 @@ module.exports = {
   readFile: (url) => fsEx.readFile(url, 'utf-8'),
   writeFile: (url, data) => fsEx.outputFile(url, data),
   readDir: path => fsEx.readdir(path),
-  createNewDir: dirName => { // FIXME: Fix promises
+  createNewDir: dirName => {
     return new Promise((res, rej) => {
       fs.stat(dirName, (err) => {
         if (err) {

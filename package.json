@@ -16,6 +16,6 @@
     "fs-extra": "^6.0.1"
   },
   "devDependencies": {
-    "serve": "^10.1.2"
+    "serve": "^14.1.1"
   }
 }

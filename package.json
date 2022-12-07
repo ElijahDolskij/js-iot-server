@@ -11,8 +11,8 @@
   "author": "Elijah Dolskij",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.3",
+    "body-parser": "^1.20.1",
+    "express": "^4.18.2",
     "fs-extra": "^6.0.1"
   },
   "devDependencies": {
